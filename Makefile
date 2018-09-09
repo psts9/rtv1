@@ -12,7 +12,8 @@ SRC = src/rtv1.c \
 	  src/draw.c \
 	  src/exit.c \
 	  src/event_handler.c \
-	  src/raytrace.c
+	  src/raytrace.c \
+	  src/vector_math.c
 
 all: $(NAME)
 
@@ -27,4 +28,9 @@ fclean: clean
 	rm -f $(NAME)
 	make fclean -C $(LIBDIR)
 
+dev: FLAGS += -Wno-error
+dev: all
+
 re: fclean all
+
+.PHONY: all clean fclean dev re

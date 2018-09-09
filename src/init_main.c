@@ -13,6 +13,7 @@ static void	sdl_init(void)
 void		init_program(t_prog *prog)
 {
 	prog->running = 1;
+	prog->expose = 1;
 }
 
 void		init(t_prog *prog, char *program_name)

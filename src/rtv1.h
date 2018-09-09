@@ -3,8 +3,8 @@
 
 # include <SDL2/SDL.h>
 
-# define RES_X 1680
-# define RES_Y 1050
+# define RES_X 1024
+# define RES_Y 720
 
 typedef struct		s_screen
 {
@@ -18,6 +18,7 @@ typedef struct		s_prog
 {
 	char			*name;
 	int				running;
+	int				expose;
 	t_screen		screen;
 	SDL_Event		event;
 }					t_prog;
