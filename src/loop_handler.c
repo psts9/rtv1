@@ -17,13 +17,14 @@ void	run(t_prog *prog)
 {
 	while (prog->running)
 	{
-		do_events(prog);
 		if (prog->expose == 1)
 		{
 			raytrace(prog);
 			update_screen(&prog->screen);
 			prog->expose = 0;
 		}
+		do_events(prog);
+		SDL_Delay(30);
 	}
 	exit_program(prog);
 }
