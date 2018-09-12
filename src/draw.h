@@ -12,5 +12,6 @@ typedef struct		s_rgb
 
 void				put_pixel(int color, int x, int y, t_screen *screen);
 void				put_pixel_rgb(t_rgb rgb, int x, int y, t_screen *screen);
+void				update_screen(t_screen *screen);
 
 #endif

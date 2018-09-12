@@ -2,17 +2,20 @@
 
 #include "rtv1.h"
 #include "draw.h"
+#include "object_list.h"
 #include "raytrace.h"
 
 #include <stdio.h>
+#include <float.h>
 
 #define RANGE(x, min, max, a, b) (((b - a) * (x - min)) / (max - min) + a)
+#define MIN_DIST 0.0
 
 /*
 	Sets up a quadractic equations where if any solution is found, the direction the ray is facing will end up in a collision with a sphere object
 	We get the positive solution for the equation to find the intersection point
 */
-
+/*
 double	hit_sphere(t_vec3 *origin, double radius, t_ray *ray)
 {
 	t_vec3	pos;
@@ -31,59 +34,123 @@ double	hit_sphere(t_vec3 *origin, double radius, t_ray *ray)
 	else
 		return ((-b - sqrt(d)) / (2.0 * a));
 }
+*/
 
+typedef int (*t_matfunc)(t_ray *, t_hitrecord *, t_vec3 *, t_ray *);
+t_matfunc mat_funcs[3] = { mat_lambertian, mat_metal, mat_dielectric };
 
+typedef int (*t_hitfunc)(t_ray *, double, t_hitrecord *, t_object *object);
+t_hitfunc hit_funcs[2] = { hit_sphere, hit_cylinder };
 
-t_rgb	get_color(t_ray *ray)
+int		hit_objlist(t_ray *ray, double dist, t_hitrecord *rec, t_objlist *objlist)
 {
-	t_rgb	result;
-	double	n;
-	t_vec3	temp1;
-	t_vec3	temp2;
+	t_hitrecord temp_rec;
+	int	hit;
 
-	temp1 = (t_vec3) { 0, 0, -1 };
-	n = hit_sphere(&temp1, 0.5, ray);
-	if (n > 0.0)
+	hit = 0;
+	while (objlist)
 	{
-		temp2 = vec_mul_num(&ray->direction, n);
-		temp2 = vec_add(&ray->origin, &temp2);
-		temp2 = vec_sub(&temp2, &temp1);
-		temp1 = vec_unit(&temp2);
-		temp1 = vec_add_num(&temp1, 1.0);
-		temp1 = vec_mul_num(&temp1, 0.5);
-		result.r = temp1.x * 255;
-		result.g = temp1.y * 255;
-		result.b = temp1.z * 255;
+		if (hit_funcs[objlist->object.type](ray, dist, &temp_rec, &objlist->object))
+		{
+			hit = 1;
+			dist = temp_rec.d;
+			*rec = temp_rec;
+			rec->material = &objlist->object.material;
+		}
+		objlist = objlist->next;
 	}
-	else
-		result = (t_rgb) { 0, 0, 0 };
-	return (result);
+	return (hit);
 }
 
-void	get_ray_dir(t_ray *ray, int x, int y)
+t_vec3	get_color(t_ray *ray, t_objlist *objlist, int depth)
 {
-	ray->direction.x = RANGE(
-		(float)x,
+	t_ray		tmpr;
+	t_vec3		tmp1;
+	t_vec3		tmp2;
+	double		d;
+	t_hitrecord	rec;
+
+	if (hit_objlist(ray, DBL_MAX, &rec, objlist))
+	{
+		if (depth < MAX_DEPTH
+			&& mat_funcs[rec.material->type](ray, &rec, &tmp1, &tmpr))
+		{
+			tmp2 = get_color(&tmpr, objlist, depth + 1);
+			tmp2 = vec_mul(&tmp1, &tmp2);
+			return (tmp2);
+		}
+		else
+		{
+			tmp2 = (t_vec3) { 0.0, 0.0, 0.0 };
+			return (tmp2);
+		}
+	}
+	else
+	{
+		tmp1 = vec_unit(&ray->direction);
+		d = 0.5 * (tmp1.y + 1.0);
+		tmp1 = (t_vec3) { 1.0, 1.0, 1.0 };
+		tmp1 = vec_mul_num(&tmp1, 1.0 - d);
+		tmp2 = (t_vec3) { 0.5, 0.7, 1.0 };
+		tmp2 = vec_mul_num(&tmp2, d);
+		tmp1 = vec_add(&tmp1, &tmp2);
+		return (tmp1);
+	}
+}
+
+void	get_ray_dir(t_ray *ray, double x, double y)
+{
+	ray->direction.x = RANGE
+	(
+		(double)x,
 		0.0,
-		(float)RES_X,
-		(float)(-RES_X) / RES_Y,
-		(float)RES_X / RES_Y
+		(double)RES_X,
+		(double)(-RES_X) / RES_Y,
+		(double)RES_X / RES_Y
 	);
-	ray->direction.y = RANGE(
-		(float)y,
+	ray->direction.y = RANGE
+	(
+		(double)y,
 		0.0,
-		(float)RES_Y,
+		(double)RES_Y,
 		1.0,
 		-1.0
 	);
-	ray->direction.z = -1;
+	ray->direction.z = -1.0;
 }
 
-void	raytrace(t_prog *prog)
+// TODO: Change drand48() to custom function
+
+t_rgb	sampled_color(t_ray *ray, t_objlist *objlist, int x, int y)
 {
-	int		x;
-	int		y;
-	t_ray	ray;
+	int		i;
+	t_rgb 	result;
+	t_vec3	temp_res;
+	t_vec3	temp;
+
+	i = 0;
+	temp = (t_vec3) { 0.0, 0.0, 0.0 };
+	while (i < SAMPLING_AMOUNT)
+	{
+		get_ray_dir(ray, x + drand48(), y + drand48());
+		temp_res = get_color(ray, objlist, 0);
+		temp = vec_add(&temp, &temp_res);
+		++i;
+	}
+	temp = vec_div_num(&temp, SAMPLING_AMOUNT);
+	temp = (t_vec3) { pow(temp.x, GAMMA), pow(temp.y, GAMMA), pow(temp.z, GAMMA) };
+	result = (t_rgb) { temp.x * 255, temp.y * 255, temp.z * 255 };
+	return (result);
+}
+
+#include "events.h"
+
+void	raytrace(t_prog *prog, t_objlist *objlist)
+{
+	int			x;
+	int			y;
+	t_ray		ray;
+	t_rgb		color;
 
 	y = 0;
 	ray.origin = (t_vec3) { 0.0, 0.0, 0.0 };
@@ -92,10 +159,12 @@ void	raytrace(t_prog *prog)
 		x = 0;
 		while (x < RES_X)
 		{
-			get_ray_dir(&ray, x, y);
-			put_pixel_rgb(get_color(&ray), x, y, &prog->screen);
+			color = sampled_color(&ray, objlist, x, y);
+			put_pixel_rgb(color, x, y, &prog->screen);
 			++x;
 		}
+		update_screen(&prog->screen);
+		do_events_running(prog);
 		++y;
 	}
 }

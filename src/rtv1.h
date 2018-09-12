@@ -6,6 +6,13 @@
 # define RES_X 1024
 # define RES_Y 720
 
+# define SAMPLING_AMOUNT 100
+# define MIN_REFLECT_FLOAT 0.001
+# define GAMMA 0.5
+# define MAX_DEPTH 50
+
+# define THREADS 4
+
 typedef struct		s_screen
 {
 	SDL_Window		*window;

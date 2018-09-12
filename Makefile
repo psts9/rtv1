@@ -13,7 +13,12 @@ SRC = src/rtv1.c \
 	  src/exit.c \
 	  src/event_handler.c \
 	  src/raytrace.c \
-	  src/vector_math.c
+	  src/vector_math.c \
+	  src/object_list.c \
+	  src/materials.c \
+	  src/raytrace_utility_math.c \
+	  src/sphere.c \
+	  src/cylinder.c
 
 all: $(NAME)
 

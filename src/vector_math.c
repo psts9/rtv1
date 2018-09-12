@@ -82,14 +82,19 @@ t_vec3	vec_div_num(t_vec3 *v, double n)
 	});
 }
 
-double	vec_length(t_vec3 *v)
+double	vec_squaredlength(t_vec3 *v)
 {
 	return
-	(sqrt(
-		v->x * v->x + 
+	(
+		v->x * v->x +
 		v->y * v->y +
 		v->z * v->z
-	));
+	);
+}
+
+double	vec_length(t_vec3 *v)
+{
+	return (sqrt(vec_squaredlength(v)));
 }
 
 double	vec_dotproduct(t_vec3 *v1, t_vec3 *v2)
@@ -108,4 +113,24 @@ t_vec3	vec_unit(t_vec3 *v)
 
 	length = vec_length(v);
 	return (vec_div_num(v, length));
+}
+
+t_vec3	vec_normalize(t_vec3 *v)
+{
+	t_vec3	result;
+	double	length;
+
+	length = vec_length(v);
+	result = vec_div_num(v, length);
+	return (result);
+}
+
+t_vec3	vec_negative(t_vec3 *v)
+{
+	return ((t_vec3)
+	{
+		-(v->x),
+		-(v->y),
+		-(v->z)
+	});
 }

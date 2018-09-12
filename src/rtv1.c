@@ -22,7 +22,7 @@ int main(int argc, char **argv)
 {
 	argc = 0;
 	t_prog	prog;
-
+	
 	init(&prog, argv[0]);
 	run(&prog);
 	return (0);

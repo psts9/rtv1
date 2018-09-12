@@ -1,6 +1,15 @@
+#include <SDL2/SDL.h>
 
 #include "rtv1.h"
 #include "draw.h"
+
+void	update_screen(t_screen *screen)
+{
+	SDL_UpdateTexture(screen->texture, NULL, screen->pixels, RES_X * sizeof(uint32_t));
+	SDL_RenderClear(screen->renderer);
+	SDL_RenderCopy(screen->renderer, screen->texture, 0, 0);
+	SDL_RenderPresent(screen->renderer);
+}
 
 void put_pixel(int color, int x, int y, t_screen *screen)
 {
