@@ -6,8 +6,8 @@
 # define RES_X 1024
 # define RES_Y 720
 
-# define SAMPLING_AMOUNT 100
-# define MIN_REFLECT_FLOAT 0.001
+# define SAMPLING_AMOUNT 40
+# define MIN_REFLECT_FLOAT 0.00001
 # define GAMMA 0.5
 # define MAX_DEPTH 50
 

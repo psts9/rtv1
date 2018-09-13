@@ -6,7 +6,9 @@
 enum object_type
 {
 	SPHERE,
-	CYLINDER
+	CYLINDER,
+	CONE,
+	PLANE
 };
 
 enum material_type

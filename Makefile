@@ -18,11 +18,15 @@ SRC = src/rtv1.c \
 	  src/materials.c \
 	  src/raytrace_utility_math.c \
 	  src/sphere.c \
-	  src/cylinder.c
+	  src/cylinder.c \
+	  src/cone.c \
+	  src/plane.c
+
+HDR = $(wildcard src/*.h)
 
 all: $(NAME)
 
-$(NAME): $(SRC)
+$(NAME): $(SRC) $(HDR)
 	make -C $(LIBDIR)
 	gcc $(FLAGS) $(SRC) -o $(NAME) $(LIB)
 

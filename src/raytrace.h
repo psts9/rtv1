@@ -29,5 +29,7 @@ int		mat_metal(t_ray *ray, t_hitrecord *rec, t_vec3 *att, t_ray *result);
 int		mat_dielectric(t_ray *ray, t_hitrecord *rec, t_vec3 *att, t_ray *result);
 int		hit_cylinder(t_ray *ray, double dist, t_hitrecord *rec, t_object *object);
 int		hit_sphere(t_ray *ray, double dist, t_hitrecord *rec, t_object *object);
+int		hit_cone(t_ray *ray, double dist, t_hitrecord *rec, t_object *object);
+int		hit_plane(t_ray *ray, double dist, t_hitrecord *rec, t_object *object);
 
 #endif

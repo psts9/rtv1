@@ -40,7 +40,7 @@ typedef int (*t_matfunc)(t_ray *, t_hitrecord *, t_vec3 *, t_ray *);
 t_matfunc mat_funcs[3] = { mat_lambertian, mat_metal, mat_dielectric };
 
 typedef int (*t_hitfunc)(t_ray *, double, t_hitrecord *, t_object *object);
-t_hitfunc hit_funcs[2] = { hit_sphere, hit_cylinder };
+t_hitfunc hit_funcs[4] = { hit_sphere, hit_cylinder, hit_cone, hit_plane };
 
 int		hit_objlist(t_ray *ray, double dist, t_hitrecord *rec, t_objlist *objlist)
 {
@@ -94,6 +94,7 @@ t_vec3	get_color(t_ray *ray, t_objlist *objlist, int depth)
 		tmp2 = (t_vec3) { 0.5, 0.7, 1.0 };
 		tmp2 = vec_mul_num(&tmp2, d);
 		tmp1 = vec_add(&tmp1, &tmp2);
+//		tmp1 = (t_vec3) { 0.6, 0.2, 0.2 };
 		return (tmp1);
 	}
 }
