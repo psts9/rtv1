@@ -1,0 +1,12 @@
+# test demo
+
+resolution = 1024 720
+
+camera:
+	position = 0.0 0.0 0.0
+	rotation = 0.0 0.0 0.0
+
+sphere:
+	radius = 100.0
+	position = 0.0 0.0 0.0
+	color = 255 0 0

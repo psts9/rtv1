@@ -1,17 +1,16 @@
 #include <stdlib.h>
 
-#include "error.h"
-#include "object.h"
 #include "object_list.h"
+#include "error.h"
 
 void	objlist_push_back(t_objlist **list, t_object object)
 {
 	t_objlist *new;
 	t_objlist *last;
-	
-	new = (t_objlist*)malloc(sizeof(t_objlist));
+
+	new = (t_objlist *)malloc(sizeof(t_objlist));
 	if (!new)
-		perror_exit("Cannot allocate space for object");
+		perror_exit("Cannot allocate space");
 	new->object = object;
 	new->next = NULL;
 	if (!(*list))

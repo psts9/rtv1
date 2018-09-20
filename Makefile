@@ -1,41 +1,41 @@
 NAME = rtv1
 
-LIBDIR = libft/
-LIB = $(LIBDIR)libft.a
-FLAGS = -Wall -Werror -Wextra -I libft -I include -L libsdl/lib -l SDL2-2.0.0
+LIBFTDIR = libft/
+LIBFT = $(LIBFTDIR)libft.a
+FLAGS = -Wall -Werror -Wextra -I libft -I include_sdl -L lib_sdl/lib -l SDL2-2.0.0 -I include
 
 SRC = src/rtv1.c \
-	  src/error.c \
 	  src/init_main.c \
 	  src/init_screen.c \
-	  src/loop_handler.c \
-	  src/draw.c \
-	  src/exit.c \
-	  src/event_handler.c \
-	  src/raytrace.c \
-	  src/vector_math.c \
+	  src/error.c \
 	  src/object_list.c \
-	  src/materials.c \
-	  src/raytrace_utility_math.c \
+	  src/loop_handler.c \
+	  src/exit.c \
+	  src/draw.c \
+	  src/raytrace.c \
+	  src/event_handler.c \
+	  src/vector_math.c \
+	  src/color.c \
 	  src/sphere.c \
+	  src/raytrace_utility_math.c \
 	  src/cylinder.c \
 	  src/cone.c \
 	  src/plane.c
 
-HDR = $(wildcard src/*.h)
+HDR = $(wildcard include/*.h)
 
 all: $(NAME)
 
 $(NAME): $(SRC) $(HDR)
-	make -C $(LIBDIR)
-	gcc $(FLAGS) $(SRC) -o $(NAME) $(LIB)
+	make -C $(LIBFTDIR)
+	gcc $(FLAGS) $(SRC) -o $(NAME) $(LIBFT)
 
 clean:
-	make clean -C $(LIBDIR)
+	make clean -C $(LIBFTDIR)
 
 fclean: clean
 	rm -f $(NAME)
-	make fclean -C $(LIBDIR)
+	make fclean -C $(LIBFTDIR)
 
 dev: FLAGS += -Wno-error
 dev: all

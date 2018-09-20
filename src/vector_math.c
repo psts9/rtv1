@@ -5,8 +5,8 @@
 t_vec3	vec_add(t_vec3 *v1, t_vec3 *v2)
 {
 	return ((t_vec3)
-	{ 
-		v1->x + v2->x, 
+	{
+		v1->x + v2->x,
 		v1->y + v2->y,
 		v1->z + v2->z
 	});
@@ -101,18 +101,10 @@ double	vec_dotproduct(t_vec3 *v1, t_vec3 *v2)
 {
 	return
 	(
-		v1->x * v2->x + 
-		v1->y * v2->y + 
+		v1->x * v2->x +
+		v1->y * v2->y +
 		v1->z * v2->z
 	);
-}
-
-t_vec3	vec_unit(t_vec3 *v)
-{
-	double	length;
-
-	length = vec_length(v);
-	return (vec_div_num(v, length));
 }
 
 t_vec3	vec_normalize(t_vec3 *v)
@@ -132,5 +124,15 @@ t_vec3	vec_negative(t_vec3 *v)
 		-(v->x),
 		-(v->y),
 		-(v->z)
+	});
+}
+
+t_vec3	vec_crossproduct(t_vec3 *v1, t_vec3 *v2)
+{
+	return ((t_vec3)
+	{
+		v1->y * v2->z - v1->z * v2->y,
+	   -v1->x * v2->z - v1->z * v2->x,
+		v1->x * v2->y - v1->y * v2->x
 	});
 }

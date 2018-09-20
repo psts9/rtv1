@@ -5,20 +5,25 @@
 
 void	update_screen(t_screen *screen)
 {
-	SDL_UpdateTexture(screen->texture, NULL, screen->pixels, RES_X * sizeof(uint32_t));
+	SDL_UpdateTexture(
+		screen->texture,
+		NULL,
+		screen->pixels,
+		screen->width * sizeof(int)
+	);
 	SDL_RenderClear(screen->renderer);
 	SDL_RenderCopy(screen->renderer, screen->texture, 0, 0);
 	SDL_RenderPresent(screen->renderer);
 }
 
-void put_pixel(int color, int x, int y, t_screen *screen)
+void	put_pixel(int color, int x, int y, t_screen *screen)
 {
-	screen->pixels[x + y * RES_X] = color;
+	screen->pixels[x + y * screen->width] = color;
 }
 
-void put_pixel_rgb(t_rgb rgb, int x, int y, t_screen *screen)
+void	put_pixel_rgb(t_rgb rgb, int x, int y, t_screen *screen)
 {
-	int color;
+	int	color;
 
 	color = rgb.r;
 	color = (color << 8) + rgb.g;

@@ -1,8 +1,7 @@
 #include "rtv1.h"
-
 #include "libft.h"
 
-void exit_program(t_prog *prog)
+void	exit_program(t_prog *prog)
 {
 	SDL_DestroyTexture(prog->screen.texture);
 	SDL_DestroyRenderer(prog->screen.renderer);

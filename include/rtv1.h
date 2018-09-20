@@ -3,22 +3,25 @@
 
 # include <SDL2/SDL.h>
 
-# define RES_X 1024
-# define RES_Y 720
+# define DEFAULT_SWIDTH		1920
+# define DEFAULT_SHEIGHT	1080
 
-# define SAMPLING_AMOUNT 40
-# define MIN_REFLECT_FLOAT 0.00001
-# define GAMMA 0.5
-# define MAX_DEPTH 50
+# define EPSILON 0.000001
+# define DEG_TO_RAD 0.01745329251994
+# define RAD_TO_DEG 57.2957795130823
 
-# define THREADS 4
+# define VIEWING_DIST 500.0
+# define GAMMA 1.0
+# define DS_SHADE 0.1
 
 typedef struct		s_screen
 {
 	SDL_Window		*window;
 	SDL_Renderer	*renderer;
 	SDL_Texture		*texture;
-	uint32_t		pixels[RES_X * RES_Y];
+	int				width;
+	int				height;
+	int				*pixels;
 }					t_screen;
 
 typedef struct		s_prog

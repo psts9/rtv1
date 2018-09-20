@@ -1,51 +1,38 @@
+#include "rtv1.h"
 #include "raytrace.h"
+#include "vector.h"
 
-int hit_cylinder(t_ray *ray, double dist, t_hitrecord *rec, t_object *object)
+static t_hitrecord record_cylinder_hit(double d, t_ray *ray, t_object *object)
 {
-	t_vec3	tpos;
+	t_hitrecord	rec;
+
+	rec.d = d;
+	rec.point = point_at_collision(ray, d);
+	rec.normal = (t_vec3) { rec.point.x - object->position.x, 0, rec.point.z - object->position.z };
+	rec.normal = vec_normalize(&rec.normal);
+	return (rec);
+}
+
+int	hit_cylinder(t_ray *ray, double dist, t_hitrecord *rec, t_object *object)
+{
+	t_vec3	pos;
 	double	a;
 	double	b;
 	double	c;
 	double	d;
-	double	z;
-	double 	y_min;
-	double	y_max;
 
-	tpos = vec_sub(&ray->origin, &object->position);
-	a = pow(ray->direction.x, 2) + pow(ray->direction.z, 2);
-	b =  2.0 * tpos.x * ray->direction.x;
-	b += 2.0 * tpos.z * ray->direction.z;
-	c = pow(tpos.x, 2) + pow(tpos.z, 2) - object->scale.x * object->scale.x;
-
-	if (b * b - 4 * a * c > MIN_REFLECT_FLOAT)
+	pos = vec_sub(&ray->origin, &object->position);
+	a = pow(ray->direction.x, 2.0) + pow(ray->direction.z, 2.0);
+	b = pos.x * ray->direction.x +
+		pos.z * ray->direction.z;
+	c = pow(pos.x, 2.0) + pow(pos.z, 2.0) - pow(object->radius, 2.0);
+	if (b * b - a * c > EPSILON)
 	{
-		y_min = ray->origin.y - tpos.y - object->scale.y / 2.0;
-		y_max = y_min + object->scale.y;
-		d = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-		z = tpos.y + ray->direction.y * d;
-		if (d < dist && d > MIN_REFLECT_FLOAT)
+		d = is_in_view(a, b, c, dist);
+		if (d != -1.0)
 		{
-			if (z > y_min && z < y_max)
-			{
-				rec->d = d;
-				rec->point = point_at_collision(ray, d);
-				rec->normal = (t_vec3) { rec->point.x - object->position.x, 0, rec->point.z - object->position.z };
-				rec->normal = vec_normalize(&rec->normal);
-				return (1);
-			}
-		}
-		d = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-		z = tpos.y + ray->direction.y * d;
-		if (d < dist && d > MIN_REFLECT_FLOAT)
-		{
-			if (z > y_min && z < y_max)
-			{
-				rec->d = d;
-				rec->point = point_at_collision(ray, d);
-				rec->normal = (t_vec3) { rec->point.x - object->position.x, 0, rec->point.z - object->position.z };
-				rec->normal = vec_normalize(&rec->normal);
-				return (1);
-			}
+			*rec = record_cylinder_hit(d, ray, object);
+			return (1);
 		}
 	}
 	return (0);

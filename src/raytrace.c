@@ -1,51 +1,21 @@
 #include <math.h>
+#include <stdio.h>
 
 #include "rtv1.h"
 #include "draw.h"
 #include "object_list.h"
 #include "raytrace.h"
-
-#include <stdio.h>
-#include <float.h>
-
-#define RANGE(x, min, max, a, b) (((b - a) * (x - min)) / (max - min) + a)
-#define MIN_DIST 0.0
-
-/*
-	Sets up a quadractic equations where if any solution is found, the direction the ray is facing will end up in a collision with a sphere object
-	We get the positive solution for the equation to find the intersection point
-*/
-/*
-double	hit_sphere(t_vec3 *origin, double radius, t_ray *ray)
-{
-	t_vec3	pos;
-	double	a;
-	double	b;
-	double	c;
-	double	d;
-	
-	pos = vec_sub(&ray->origin, origin);
-	a = vec_dotproduct(&ray->direction, &ray->direction);
-	b = 2.0 * vec_dotproduct(&pos, &ray->direction);
-	c = vec_dotproduct(&pos, &pos) - radius * radius;
-	d = b * b - 4.0 * a * c;
-	if (d < 0.0)
-		return (-1.0);
-	else
-		return ((-b - sqrt(d)) / (2.0 * a));
-}
-*/
-
-typedef int (*t_matfunc)(t_ray *, t_hitrecord *, t_vec3 *, t_ray *);
-t_matfunc mat_funcs[3] = { mat_lambertian, mat_metal, mat_dielectric };
+#include "events.h"
+#include "time.h"
+#include "camera.h"
 
 typedef int (*t_hitfunc)(t_ray *, double, t_hitrecord *, t_object *object);
 t_hitfunc hit_funcs[4] = { hit_sphere, hit_cylinder, hit_cone, hit_plane };
 
 int		hit_objlist(t_ray *ray, double dist, t_hitrecord *rec, t_objlist *objlist)
 {
-	t_hitrecord temp_rec;
-	int	hit;
+	t_hitrecord	temp_rec;
+	int			hit;
 
 	hit = 0;
 	while (objlist)
@@ -54,113 +24,120 @@ int		hit_objlist(t_ray *ray, double dist, t_hitrecord *rec, t_objlist *objlist)
 		{
 			hit = 1;
 			dist = temp_rec.d;
+			temp_rec.albedo = objlist->object.albedo;
 			*rec = temp_rec;
-			rec->material = &objlist->object.material;
 		}
 		objlist = objlist->next;
 	}
 	return (hit);
 }
 
-t_vec3	get_color(t_ray *ray, t_objlist *objlist, int depth)
+double	get_brightness(t_vec3 *v)
 {
-	t_ray		tmpr;
-	t_vec3		tmp1;
-	t_vec3		tmp2;
-	double		d;
+	double	brightness;
+	t_vec3	light_dir = (t_vec3) { -1.0,-1.0,-1.0 };
+
+	light_dir = vec_negative(&light_dir);
+	light_dir = vec_normalize(&light_dir);
+	brightness = vec_dotproduct(v, &light_dir);
+	if (brightness > 0.0)
+		return ((brightness + DS_SHADE) / (1.0 + DS_SHADE));
+	return (DS_SHADE);
+}
+
+void	apply_brightspot(t_rgb *col, double amount)
+{
+	t_rgb	brightspot_color = { 255, 255, 255 };
+
+	*col = apply_fog(col, &brightspot_color, amount);
+}
+
+t_rgb	get_color(t_ray *ray, t_objlist *objlist)
+{
+	t_rgb		result;
 	t_hitrecord	rec;
 
 	if (hit_objlist(ray, DBL_MAX, &rec, objlist))
 	{
-		if (depth < MAX_DEPTH
-			&& mat_funcs[rec.material->type](ray, &rec, &tmp1, &tmpr))
-		{
-			tmp2 = get_color(&tmpr, objlist, depth + 1);
-			tmp2 = vec_mul(&tmp1, &tmp2);
-			return (tmp2);
-		}
+		double b = get_brightness(&rec.normal);
+		result.r = pow(rec.albedo.x * 255, GAMMA);
+		result.g = pow(rec.albedo.y * 255, GAMMA);
+		result.b = pow(rec.albedo.z * 255, GAMMA);
+		if (b > 0.95)
+			apply_brightspot(&result, RANGE(b, 0.95, 1.0, 0.0, 0.2));
+		if (rec.d < VIEWING_DIST)
+			result = change_brightness(&result, 1.0 - (rec.d / VIEWING_DIST));
 		else
-		{
-			tmp2 = (t_vec3) { 0.0, 0.0, 0.0 };
-			return (tmp2);
-		}
+			result = change_brightness(&result, 0.0);
+		result = change_brightness(&result, b);
 	}
 	else
 	{
-		tmp1 = vec_unit(&ray->direction);
-		d = 0.5 * (tmp1.y + 1.0);
-		tmp1 = (t_vec3) { 1.0, 1.0, 1.0 };
-		tmp1 = vec_mul_num(&tmp1, 1.0 - d);
-		tmp2 = (t_vec3) { 0.5, 0.7, 1.0 };
-		tmp2 = vec_mul_num(&tmp2, d);
-		tmp1 = vec_add(&tmp1, &tmp2);
-//		tmp1 = (t_vec3) { 0.6, 0.2, 0.2 };
-		return (tmp1);
+		result = (t_rgb) { 0, 0, 0 };
 	}
-}
-
-void	get_ray_dir(t_ray *ray, double x, double y)
-{
-	ray->direction.x = RANGE
-	(
-		(double)x,
-		0.0,
-		(double)RES_X,
-		(double)(-RES_X) / RES_Y,
-		(double)RES_X / RES_Y
-	);
-	ray->direction.y = RANGE
-	(
-		(double)y,
-		0.0,
-		(double)RES_Y,
-		1.0,
-		-1.0
-	);
-	ray->direction.z = -1.0;
-}
-
-// TODO: Change drand48() to custom function
-
-t_rgb	sampled_color(t_ray *ray, t_objlist *objlist, int x, int y)
-{
-	int		i;
-	t_rgb 	result;
-	t_vec3	temp_res;
-	t_vec3	temp;
-
-	i = 0;
-	temp = (t_vec3) { 0.0, 0.0, 0.0 };
-	while (i < SAMPLING_AMOUNT)
-	{
-		get_ray_dir(ray, x + drand48(), y + drand48());
-		temp_res = get_color(ray, objlist, 0);
-		temp = vec_add(&temp, &temp_res);
-		++i;
-	}
-	temp = vec_div_num(&temp, SAMPLING_AMOUNT);
-	temp = (t_vec3) { pow(temp.x, GAMMA), pow(temp.y, GAMMA), pow(temp.z, GAMMA) };
-	result = (t_rgb) { temp.x * 255, temp.y * 255, temp.z * 255 };
 	return (result);
 }
 
-#include "events.h"
+t_ray	get_ray_dir(t_camera *cam, double x, double y, t_screen *screen)
+{
+	t_ray	result;
+	t_vec3	temp;
+
+	temp = vec_mul_num(&cam->horizontal, screen->width / x);
+	result.origin = cam->origin;
+	result.direction = vec_add(&cam->start_point, &temp);
+	temp = vec_mul_num(&cam->vertical, screen->height / y);
+	result.direction = vec_add(&cam->start_point, &temp);
+	result.direction = vec_sub(&result.direction, &cam->origin);
+	return (result);
+}
+
+t_camera init_camera(t_vec3 *origin, t_vec3 *direction, t_vec3 *up, t_screen *screen)
+{
+	t_camera	cam;
+	t_vec3		w;
+	t_vec3		u;
+	t_vec3		v;
+	t_vec3		temp;
+
+	cam.origin = *origin;
+	w = vec_sub(origin, direction);
+	w = vec_normalize(&w);
+	u = vec_crossproduct(up, &w);
+	u = vec_normalize(&u);
+	v = vec_crossproduct(&w, &u);
+	temp = vec_mul_num(&u, screen->width / screen->height * 2);
+	cam.start_point = vec_sub(origin, &temp);
+	temp = vec_mul_num(&v, -1.0);
+	cam.start_point = vec_sub(&cam.start_point, &temp);
+	cam.start_point = vec_sub(&cam.start_point, &w);
+	cam.horizontal = vec_mul_num(&u, screen->width / screen->height * 2.0);
+	cam.vertical = vec_mul_num(&v, -2.0);
+	return (cam);
+}
 
 void	raytrace(t_prog *prog, t_objlist *objlist)
 {
-	int			x;
-	int			y;
-	t_ray		ray;
-	t_rgb		color;
+	int		x;
+	int		y;
+	t_ray	ray;
+	t_rgb	color;
+	t_camera cam;
 
+	t_vec3	cam_origin = (t_vec3) { 0.0, 0.0, 0.0 };
+	t_vec3	cam_direction = (t_vec3) { 0.0, 0.0, -1.0 };
+	t_vec3	cam_up = (t_vec3) { 0.0, 1.0, 0.0 };
+
+	cam = init_camera(&cam_origin, &cam_direction, &cam_up, &prog->screen);
+	printf("%f %f %f\n", cam.vertical.x, cam.vertical.y, cam.vertical.z);
 	y = 0;
-	ray.origin = (t_vec3) { 0.0, 0.0, 0.0 };
-	while (y < RES_Y)
+	while (y < prog->screen.height)
 	{
 		x = 0;
-		while (x < RES_X)
+		while (x < prog->screen.width)
 		{
-			color = sampled_color(&ray, objlist, x, y);
+			ray = get_ray_dir(&cam, x, y, &prog->screen);
+			color = get_color(&ray, objlist);
 			put_pixel_rgb(color, x, y, &prog->screen);
 			++x;
 		}
