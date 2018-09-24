@@ -9,6 +9,7 @@ typedef struct	s_camera
 	t_vec3		start_point;
 	t_vec3		vertical;
 	t_vec3		horizontal;
+	t_vec3		direction;
 }				t_camera;
 
 #endif

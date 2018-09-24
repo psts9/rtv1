@@ -3,8 +3,8 @@
 
 # include <SDL2/SDL.h>
 
-# define DEFAULT_SWIDTH		1920
-# define DEFAULT_SHEIGHT	1080
+# define DEFAULT_SWIDTH		300
+# define DEFAULT_SHEIGHT	200
 
 # define EPSILON 0.000001
 # define DEG_TO_RAD 0.01745329251994

@@ -8,6 +8,7 @@
 #include "events.h"
 #include "time.h"
 #include "camera.h"
+#include "matrix.h"
 
 typedef int (*t_hitfunc)(t_ray *, double, t_hitrecord *, t_object *object);
 t_hitfunc hit_funcs[4] = { hit_sphere, hit_cylinder, hit_cone, hit_plane };
@@ -63,8 +64,7 @@ t_rgb	get_color(t_ray *ray, t_objlist *objlist)
 		result.r = pow(rec.albedo.x * 255, GAMMA);
 		result.g = pow(rec.albedo.y * 255, GAMMA);
 		result.b = pow(rec.albedo.z * 255, GAMMA);
-		if (b > 0.95)
-			apply_brightspot(&result, RANGE(b, 0.95, 1.0, 0.0, 0.2));
+		apply_brightspot(&result, RANGE(b, 0.0, 1.0, 0.0, 0.3));
 		if (rec.d < VIEWING_DIST)
 			result = change_brightness(&result, 1.0 - (rec.d / VIEWING_DIST));
 		else
@@ -81,38 +81,36 @@ t_rgb	get_color(t_ray *ray, t_objlist *objlist)
 t_ray	get_ray_dir(t_camera *cam, double x, double y, t_screen *screen)
 {
 	t_ray	result;
-	t_vec3	temp;
-
-	temp = vec_mul_num(&cam->horizontal, screen->width / x);
+	double	aspect;
+	
+	aspect = (double)screen->width / (double)screen->height;
 	result.origin = cam->origin;
-	result.direction = vec_add(&cam->start_point, &temp);
-	temp = vec_mul_num(&cam->vertical, screen->height / y);
-	result.direction = vec_add(&cam->start_point, &temp);
-	result.direction = vec_sub(&result.direction, &cam->origin);
+	result.direction.x = (2.0 * ((x + 0.5) / (double)screen->width) - 1.0) * aspect;
+	result.direction.y = (1.0 - 2.0 * ((y + 0.5) / (double)screen->height));
+	result.direction.z = -1.0;
+	result.direction = vec_rotate(&result.direction, &cam->direction);
+	result.direction = vec_normalize(&result.direction);
 	return (result);
 }
 
-t_camera init_camera(t_vec3 *origin, t_vec3 *direction, t_vec3 *up, t_screen *screen)
-{
-	t_camera	cam;
-	t_vec3		w;
-	t_vec3		u;
-	t_vec3		v;
-	t_vec3		temp;
+// horizontal = ratio * 2, 0, 0
+// vertical = 0, -2, 0
 
+t_camera init_camera(t_vec3 *origin, t_vec3 *direction, t_screen *screen)
+{
+	// half_height = 1
+	// half_width = aspect ratio
+	t_camera	cam;
+	
 	cam.origin = *origin;
-	w = vec_sub(origin, direction);
-	w = vec_normalize(&w);
-	u = vec_crossproduct(up, &w);
-	u = vec_normalize(&u);
-	v = vec_crossproduct(&w, &u);
-	temp = vec_mul_num(&u, screen->width / screen->height * 2);
-	cam.start_point = vec_sub(origin, &temp);
-	temp = vec_mul_num(&v, -1.0);
-	cam.start_point = vec_sub(&cam.start_point, &temp);
-	cam.start_point = vec_sub(&cam.start_point, &w);
-	cam.horizontal = vec_mul_num(&u, screen->width / screen->height * 2.0);
-	cam.vertical = vec_mul_num(&v, -2.0);
+	cam.horizontal = (t_vec3) { (double)screen->width / (double)screen->height * 2, 0.0, 0.0 };
+	cam.vertical = (t_vec3) { 0.0, -2.0, 0.0 };
+	cam.start_point = cam.origin;
+	cam.start_point.x -= cam.horizontal.x / 2.0;
+	cam.start_point.y -= cam.vertical.y / 2.0;
+	cam.start_point.z = -1.0;
+	cam.direction = *direction;
+	direction = NULL;
 	return (cam);
 }
 
@@ -124,12 +122,17 @@ void	raytrace(t_prog *prog, t_objlist *objlist)
 	t_rgb	color;
 	t_camera cam;
 
-	t_vec3	cam_origin = (t_vec3) { 0.0, 0.0, 0.0 };
-	t_vec3	cam_direction = (t_vec3) { 0.0, 0.0, -1.0 };
-	t_vec3	cam_up = (t_vec3) { 0.0, 1.0, 0.0 };
+//	t_vec3	origin = (t_vec3) { 0.0, 0.0, 0.0 };
+//	double mat[4][4];
 
-	cam = init_camera(&cam_origin, &cam_direction, &cam_up, &prog->screen);
-	printf("%f %f %f\n", cam.vertical.x, cam.vertical.y, cam.vertical.z);
+	static double test = 0.0;
+
+	t_vec3	cam_origin		= (t_vec3) {  0.0,  0.0,  0.0 };
+	t_vec3	cam_direction	= (t_vec3) { test, test, test };
+
+	printf("%f\n", test++);
+
+	cam = init_camera(&cam_origin, &cam_direction, &prog->screen);
 	y = 0;
 	while (y < prog->screen.height)
 	{
@@ -141,8 +144,10 @@ void	raytrace(t_prog *prog, t_objlist *objlist)
 			put_pixel_rgb(color, x, y, &prog->screen);
 			++x;
 		}
-		update_screen(&prog->screen);
-		do_events_running(prog);
+	//	update_screen(&prog->screen);
+	//	do_events_running(prog);
 		++y;
 	}
+	update_screen(&prog->screen);
+	do_events_running(prog);
 }

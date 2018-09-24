@@ -23,3 +23,13 @@ double	is_in_view(double a, double b, double c, double dist)
 		return (d);
 	return (-1.0);
 }
+
+double	rad_to_deg(double n)
+{
+	return (n * RAD_TO_DEG);
+}
+
+double	deg_to_rad(double n)
+{
+	return (n * DEG_TO_RAD);
+}

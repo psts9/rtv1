@@ -22,5 +22,7 @@ t_vec3	vec_crossproduct(t_vec3 *v1, t_vec3 *v2);
 double	vec_squaredlength(t_vec3 *v);
 double	vec_length(t_vec3 *v);
 double	vec_dotproduct(t_vec3 *v1, t_vec3 *v2);
+void	vec_print(t_vec3 *v);
+t_vec3	vec_rotate(t_vec3 *v, t_vec3 *r);
 
 #endif

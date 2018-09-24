@@ -24,6 +24,8 @@ typedef struct	s_hitrecord
 void	raytrace(t_prog *prog, t_objlist *objlist);
 t_vec3	point_at_collision(t_ray *ray, double t);
 double	is_in_view(double a, double b, double c, double dist);
+double	deg_to_rad(double n);
+double	rad_to_deg(double n);
 
 int		hit_sphere(t_ray *ray, double dist, t_hitrecord *rec, t_object *object);
 int		hit_cylinder(t_ray *ray, double dist, t_hitrecord *rec, t_object *object);

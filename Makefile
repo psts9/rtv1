@@ -20,7 +20,8 @@ SRC = src/rtv1.c \
 	  src/raytrace_utility_math.c \
 	  src/cylinder.c \
 	  src/cone.c \
-	  src/plane.c
+	  src/plane.c \
+	  src/matrix_math.c
 
 HDR = $(wildcard include/*.h)
 
