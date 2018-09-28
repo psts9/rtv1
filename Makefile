@@ -2,7 +2,9 @@ NAME = RTv1
 
 LIBFTDIR = libft/
 LIBFT = $(LIBFTDIR)libft.a
-FLAGS = -Wall -Werror -Wextra -I libft -I include_sdl -L lib_sdl/lib -l SDL2-2.0.0 -I include
+SDL = $(SDLDIR)/build/lib/libsdl2.a
+SDLDIR = SDL2-2.0.8
+FLAGS = -Wall -Werror -Wextra -Ilibft -I$(SDLDIR)/build/include -L$(SDLDIR)/build/lib -lSDL2 -Iinclude
 
 SRC = src/rtv1.c \
 	  src/init_main.c \
@@ -36,15 +38,22 @@ HDR = $(wildcard include/*.h)
 
 all: $(NAME)
 
-$(NAME): $(SRC) $(HDR)
+$(NAME): $(SRC) $(HDR) $(SDL)
 	make -C $(LIBFTDIR)
 	gcc $(FLAGS) $(SRC) -o $(NAME) $(LIBFT)
+
+$(SDL):
+	(cd $(SDLDIR) && \
+	./configure --prefix=$$PWD/build && \
+	make && \
+	make install)
 
 clean:
 	make clean -C $(LIBFTDIR)
 
 fclean: clean
 	rm -f $(NAME)
+	rm -rf $(SDLDIR)/build
 	make fclean -C $(LIBFTDIR)
 
 dev: FLAGS += -Wno-error
