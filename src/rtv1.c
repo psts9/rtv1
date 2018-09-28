@@ -1,11 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rtv1.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pthorell <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/09/28 03:41:58 by pthorell          #+#    #+#             */
+/*   Updated: 2018/09/28 03:42:12 by pthorell         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "rtv1.h"
 #include "init.h"
 #include "loop.h"
 #include "libft.h"
+#include "scene.h"
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_prog	prog;
+	t_prog prog;
 
 	if (argc != 2)
 	{

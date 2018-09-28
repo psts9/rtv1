@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pthorell <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/09/27 23:41:57 by pthorell          #+#    #+#             */
+/*   Updated: 2018/09/27 23:41:59 by pthorell         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <SDL2/SDL.h>
 
 #include "rtv1.h"
@@ -9,8 +21,7 @@ void	update_screen(t_screen *screen)
 		screen->texture,
 		NULL,
 		screen->pixels,
-		screen->width * sizeof(int)
-	);
+		screen->width * sizeof(int));
 	SDL_RenderClear(screen->renderer);
 	SDL_RenderCopy(screen->renderer, screen->texture, 0, 0);
 	SDL_RenderPresent(screen->renderer);

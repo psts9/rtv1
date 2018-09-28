@@ -1,8 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   loop.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pthorell <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/09/28 04:05:28 by pthorell          #+#    #+#             */
+/*   Updated: 2018/09/28 04:05:29 by pthorell         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef LOOP_H
 # define LOOP_H
 
 # include "rtv1.h"
+# include "scene.h"
 
-void	run(t_prog *prog, char *scene_file);
+void	run(t_prog *prog, char *file_name);
 
 #endif

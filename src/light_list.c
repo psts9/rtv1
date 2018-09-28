@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   object_list.c                                      :+:      :+:    :+:   */
+/*   light_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pthorell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/28 02:13:42 by pthorell          #+#    #+#             */
-/*   Updated: 2018/09/28 02:13:43 by pthorell         ###   ########.fr       */
+/*   Created: 2018/09/28 01:59:52 by pthorell          #+#    #+#             */
+/*   Updated: 2018/09/28 02:00:07 by pthorell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
-#include "object_list.h"
+#include "light_list.h"
 #include "error.h"
 
-void	objlist_push_back(t_objlist **list, t_object object)
+void	lightlist_push_back(t_lightlist **list, t_light light)
 {
-	t_objlist *new;
-	t_objlist *last;
+	t_lightlist *new;
+	t_lightlist *last;
 
-	new = (t_objlist *)malloc(sizeof(t_objlist));
+	new = (t_lightlist *)malloc(sizeof(t_lightlist));
 	if (!new)
-		perror_exit("Cannot allocate space for objects");
-	new->object = object;
+		perror_exit("Cannot allocate space for lights");
+	new->light = light;
 	new->next = NULL;
 	if (!(*list))
 	{
@@ -36,9 +36,9 @@ void	objlist_push_back(t_objlist **list, t_object object)
 	last->next = new;
 }
 
-void	objlist_free(t_objlist **list)
+void	lightlist_free(t_lightlist **list)
 {
-	t_objlist *next;
+	t_lightlist *next;
 
 	while (*list)
 	{
@@ -49,9 +49,9 @@ void	objlist_free(t_objlist **list)
 	*list = NULL;
 }
 
-int		objlist_len(t_objlist *list)
+int		lightlist_len(t_lightlist *list)
 {
-	int result;
+	int	result;
 
 	result = 0;
 	while (list)

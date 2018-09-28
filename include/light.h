@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   color.h                                            :+:      :+:    :+:   */
+/*   light.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pthorell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/28 03:59:07 by pthorell          #+#    #+#             */
-/*   Updated: 2018/09/28 03:59:16 by pthorell         ###   ########.fr       */
+/*   Created: 2018/09/28 04:01:43 by pthorell          #+#    #+#             */
+/*   Updated: 2018/09/28 04:02:15 by pthorell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COLOR_H
-# define COLOR_H
+#ifndef LIGHT_H
+# define LIGHT_H
 
-typedef struct		s_rgb
+# include "vector.h"
+
+enum	e_light_type
 {
-	unsigned char	r;
-	unsigned char	g;
-	unsigned char	b;
-}					t_rgb;
+	DIRECTIONAL,
+	POINT
+};
 
-t_rgb				change_brightness(t_rgb *color, double brightness);
-t_rgb				apply_fog(t_rgb *color, t_rgb *fog_color, double amount);
+typedef struct			s_light
+{
+	enum e_light_type	type;
+	double				intensity;
+	t_vec3				albedo;
+	t_vec3				position;
+	t_vec3				rotation;
+}						t_light;
 
 #endif

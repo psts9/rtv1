@@ -1,28 +1,50 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   plane.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pthorell <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/09/28 02:13:59 by pthorell          #+#    #+#             */
+/*   Updated: 2018/09/28 02:15:25 by pthorell         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "raytrace.h"
 
-int	hit_plane(t_ray *ray, double dist, t_hitrecord *rec, t_object *object)
+static t_hitrecord	record_plane_hit(double d, t_ray *ray,
+					t_object *object, t_vec3 *surface_normal)
 {
-	t_vec3	pos;
-	t_vec3	norm = (t_vec3) { 0.0, 1.0, 0.0 };
-	t_vec3	temp;
+	t_hitrecord	rec;
+
+	rec.d = d;
+	rec.point = point_at_collision(ray, d);
+	rec.normal = *surface_normal;
+	rec.albedo = object->albedo;
+	return (rec);
+}
+
+int					hit_plane(t_ray *ray, double dist,
+					t_hitrecord *rec, t_object *object)
+{
+	t_vec3	surface_normal;
+	t_vec3	relative_position;
 	double	a;
 	double	b;
 	double	d;
 
-	b = vec_dotproduct(&norm, &ray->direction);
-	if (b == 0.0)
+	surface_normal = (t_vec3) { 0.0, 1.0, 0.0 };
+	surface_normal = vec_rotate(&surface_normal, &object->rotation);
+	relative_position = vec_sub(&ray->origin, &object->position);
+	a = -(vec_dotproduct(&relative_position, &surface_normal));
+	b = vec_dotproduct(&ray->direction, &surface_normal);
+	if (b < EPSILON && b >= 0.0)
 		return (0);
-	pos = vec_sub(&ray->origin, &object->position);
-	temp = vec_sub(&object->position, &pos);
-	a = vec_dotproduct(&norm, &temp);
 	d = a / b;
-	if (d <= 0.0 || d >= dist)
+	if (d < EPSILON || d > dist)
 		return (0);
-	rec->d = d;
-	temp = vec_mul_num(&ray->direction, d);
-	rec->point = vec_add(&temp, &pos);
-	rec->normal = vec_normalize(&norm);
-	if (pos.y < 0.0)
+	*rec = record_plane_hit(d, ray, object, &surface_normal);
+	if (b > 0.0)
 		rec->normal = vec_negative(&rec->normal);
 	return (1);
 }

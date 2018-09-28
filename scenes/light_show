@@ -1,0 +1,25 @@
+camera:
+	origin: 7.0 7.0 5.0
+	rotation: -30.0 45.0 0.0
+
+plane:
+	origin: 0.0 -5.0 0.0
+
+light_point:
+	origin:	2.0 6.0 -10.0
+	intensity: 1000.0
+	albedo: 1.0 0.2 0.2
+
+light_point:
+	origin: -2.0 6.0 -10.0
+	intensity: 1000.0
+	albedo: 0.2 0.2 1.0
+
+light_point:
+	origin: 0.0 0.0 -2.0
+	intensity: 200.0
+	albedo: 0.2 1.0 0.2
+
+sphere:
+	origin:	0.0 -2.0 -8.0
+	radius: 3

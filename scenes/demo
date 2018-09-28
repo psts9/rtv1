@@ -1,0 +1,116 @@
+# camera:
+# 	origin:		x y z
+# 	rotation:	x y z
+#
+# // object_types: sphere, cylinder, cone, plane
+# object:
+# 	origin:		x y z
+# 	rotation:	x y z
+# 	albedo:		x y z
+# 	radius:		x
+#
+# // light_types: light_directional, light_point, light (short for light_point)
+# light:
+# 	origin:		x y z
+# 	rotation:	x y z
+# 	albedo:		x y z
+# 	intensity:	x
+
+camera:
+	origin: 0.0 0.0 0.0
+	rotation: 0.0 0.0 0.0
+
+sphere:
+	radius: 0.2
+	origin: 0.0 -1.5 -3.0
+	albedo: 1.0 0.05 0.05
+	rotation: 0.0 0.0 0.0
+
+plane:
+	origin: 0.0 -2.0 0.0
+	albedo: 1.0 1.0 1.0
+	rotation: 0.0 0.0 0.0
+
+plane:
+	origin: 0.0 0.0 -10.0
+	albedo: 1.0 0.6 0.6
+	rotation: 90.0 0.0 0.0
+
+light:
+	origin: 4.0 0.0 3.0
+	intensity: 500.0
+
+light:
+	origin: -4.0 0.0 3.0
+	intensity: 500.0
+
+cylinder:
+	origin: 2.5 0.0 -6.0
+	albedo: 0.7 0.7 1.0
+	radius: 0.25
+
+cylinder:
+	origin: -2.5 0.0 -6.0
+	albedo: 0.7 0.7 1.0
+	radius: 0.25
+
+cylinder:
+	origin: 2.5 0.0 -3.0
+	albedo: 0.7 0.7 1.0
+	radius: 0.25
+
+cylinder:
+	origin: -2.5 0.0 -3.0
+	albedo: 0.7 0.7 1.0
+	radius: 0.25
+
+plane:
+	origin: 0.0 3.0 0.0
+	albedo: 0.7 0.5 0.5
+
+sphere:
+	origin: -2.5 3.0 -3.0
+	albedo: 0.7 0.7 1.0
+
+sphere:
+	origin: -2.5 -2.0 -3.0
+	albedo: 0.7 0.7 1.0
+
+sphere:
+	origin: 2.5 3.0 -3.0
+	albedo: 0.7 0.7 1.0
+
+sphere:
+	origin: 2.5 -2.0 -3.0
+	albedo: 0.7 0.7 1.0
+
+sphere:
+	origin: 2.5 3.0 -6.0
+	albedo: 0.7 0.7 1.0
+
+sphere:
+	origin: 2.5 -2.0 -6.0
+	albedo: 0.7 0.7 1.0
+
+sphere:
+	origin: -2.5 -2.0 -6.0
+	albedo: 0.7 0.7 1.0
+
+sphere:
+	origin: -2.5 3.0 -6.0
+	albedo: 0.7 0.7 1.0
+
+plane:
+	origin: -5.0 0.0 0.0
+	albedo: 1.0 1.0 1.0
+	rotation: 0.0 0.0 90.0
+
+plane:
+	origin: 5.0 0.0 0.0
+	albedo: 1.0 1.0 1.0
+	rotation: 0.0 0.0 90.0
+
+light:
+	origin: 0.0 0.0 -4.0
+	albedo: 0.2 0.2 1.0
+	intensity: 100.0

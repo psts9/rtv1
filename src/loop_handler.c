@@ -1,85 +1,49 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   loop_handler.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pthorell <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/09/28 02:12:14 by pthorell          #+#    #+#             */
+/*   Updated: 2018/09/28 02:12:30 by pthorell         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "rtv1.h"
 #include "object_list.h"
 #include "events.h"
 #include "exit.h"
 #include "raytrace.h"
-
-t_objlist	*make_objlist(char *scene_file)
-{
-	t_object	obj;
-	t_objlist	*result;
-
-	result = NULL;
-	/*
-	obj.type = CONE;
-	obj.position = (t_vec3) { 0.0, 0.0, -100.0 };
-	obj.albedo = (t_vec3) { drand48(), drand48(), drand48() };
-	obj.radius = 0.5;
-	objlist_push_back(&result, obj);
-	*/
-	obj.type = CYLINDER;
-	obj.position = (t_vec3) { -2.0, 0.0, -5.0 };
-	obj.albedo = (t_vec3) { 1.0, 0.0, 0.0 };
-	obj.radius = 0.2;
-	objlist_push_back(&result, obj);
-	obj.type = CYLINDER;
-	obj.position = (t_vec3) { 2.0, 0.0, -5.0 };
-	obj.radius = 0.5;
-	obj.albedo = (t_vec3) { 1.0, 0.0, 0.0 };
-	objlist_push_back(&result, obj);
-	obj.type = CONE;
-	obj.position = (t_vec3) { 3.0, 0.0, -5.0 };
-	obj.albedo = (t_vec3) { 1.0, 0.0, 0.0 };
-	obj.radius = 0.5;
-	objlist_push_back(&result, obj);
-	obj.type = CONE;
-	obj.position = (t_vec3) { -3.0, 0.0, -5.0 };
-	obj.albedo = (t_vec3) { 1.0, 0.0, 0.0 };
-	obj.radius = 0.5;
-	objlist_push_back(&result, obj);
-	obj.type = SPHERE;
-	obj.position = (t_vec3) { 1.0, 0.0, -5.0 };
-	obj.albedo = (t_vec3) { 1.0, 0.0, 0.0 };
-	obj.radius = 0.2;
-	objlist_push_back(&result, obj);
-	obj.type = SPHERE;
-	obj.position = (t_vec3) { -1.0, 0.0, -5.0 };
-	obj.albedo = (t_vec3) { 1.0, 0.0, 0.0 };
-	obj.radius = 0.5;
-	objlist_push_back(&result, obj);
-	obj.type = SPHERE;
-	obj.position = (t_vec3) { 0.0, 0.0, -5.0 };
-	obj.albedo = (t_vec3) { 1.0, 0.0, 0.0 };
-	obj.radius = 0.1;
-	objlist_push_back(&result, obj);
-	obj.type = PLANE;
-	obj.position = (t_vec3) { 0.0, -2.0, 0.0 };
-	obj.albedo = (t_vec3) { 1.0, 0.0, 0.0 };
-	obj.radius = 0.5;
-	objlist_push_back(&result, obj);
-	obj.type = SPHERE;
-	obj.position = (t_vec3) { 0.0, 0.0, 5.0 };
-	obj.albedo = (t_vec3) { 1.0, 0.0, 0.0 };
-	obj.radius = 1.0;
-	objlist_push_back(&result, obj);
-	scene_file = NULL;
-	return (result);
-}
+#include "scene.h"
 
 #include "libft.h"
+#include "object_list.h"
+#include "light_list.h"
+#include <unistd.h>
 
-void run(t_prog *prog, char *scene_file)
+void	run(t_prog *prog, char *file_name)
 {
-	t_objlist	*objlist;
+	t_scene	scene;
 
 	while (prog->running)
 	{
 		if (prog->expose)
 		{
-			objlist = make_objlist(scene_file);
-			raytrace(prog, objlist);
-			objlist_free(&objlist);
+			if (file_to_scene(file_name, &scene))
+			{
+				raytrace(prog, &scene);
+				objlist_free(&scene.objlist);
+				lightlist_free(&scene.lightlist);
+			}
+			else
+			{
+				ft_putendl("File is invalid!");
+				if (prog->init)
+					exit(-1);
+			}
 			prog->expose = 0;
+			prog->init = 0;
 		}
 		do_events(prog);
 		SDL_Delay(30);

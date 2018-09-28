@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   color.h                                            :+:      :+:    :+:   */
+/*   light_list.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pthorell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/28 03:59:07 by pthorell          #+#    #+#             */
-/*   Updated: 2018/09/28 03:59:16 by pthorell         ###   ########.fr       */
+/*   Created: 2018/09/28 04:04:51 by pthorell          #+#    #+#             */
+/*   Updated: 2018/09/28 04:05:03 by pthorell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COLOR_H
-# define COLOR_H
+#ifndef LIGHT_LIST_H
+# define LIGHT_LIST_H
 
-typedef struct		s_rgb
+# include "light.h"
+
+typedef struct			s_lightlist
 {
-	unsigned char	r;
-	unsigned char	g;
-	unsigned char	b;
-}					t_rgb;
+	t_light				light;
+	struct s_lightlist	*next;
+}						t_lightlist;
 
-t_rgb				change_brightness(t_rgb *color, double brightness);
-t_rgb				apply_fog(t_rgb *color, t_rgb *fog_color, double amount);
+void					lightlist_push_back(t_lightlist **list, t_light light);
+void					lightlist_free(t_lightlist **list);
+int						lightlist_len(t_lightlist *list);
 
 #endif

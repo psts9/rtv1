@@ -1,26 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   color.h                                            :+:      :+:    :+:   */
+/*   vector_math_num.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pthorell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/28 03:59:07 by pthorell          #+#    #+#             */
-/*   Updated: 2018/09/28 03:59:16 by pthorell         ###   ########.fr       */
+/*   Created: 2018/09/28 03:55:53 by pthorell          #+#    #+#             */
+/*   Updated: 2018/09/28 03:55:56 by pthorell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COLOR_H
-# define COLOR_H
+#include <math.h>
 
-typedef struct		s_rgb
+#include "vector.h"
+
+double	vec_squaredlength(t_vec3 *v)
 {
-	unsigned char	r;
-	unsigned char	g;
-	unsigned char	b;
-}					t_rgb;
+	return
+	(
+		v->x * v->x +
+		v->y * v->y +
+		v->z * v->z);
+}
 
-t_rgb				change_brightness(t_rgb *color, double brightness);
-t_rgb				apply_fog(t_rgb *color, t_rgb *fog_color, double amount);
+double	vec_length(t_vec3 *v)
+{
+	return (sqrt(vec_squaredlength(v)));
+}
 
-#endif
+double	vec_dotproduct(t_vec3 *v1, t_vec3 *v2)
+{
+	return
+	(
+		v1->x * v2->x +
+		v1->y * v2->y +
+		v1->z * v2->z);
+}

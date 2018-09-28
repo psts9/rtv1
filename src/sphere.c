@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sphere.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pthorell <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/09/28 03:43:35 by pthorell          #+#    #+#             */
+/*   Updated: 2018/09/28 03:43:55 by pthorell         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "rtv1.h"
 #include "raytrace.h"
 #include "vector.h"
 
-static t_hitrecord record_sphere_hit(double d, t_ray *ray, t_object *object)
+static t_hitrecord	record_sphere_hit(double d, t_ray *ray, t_object *object)
 {
 	t_hitrecord rec;
 
@@ -10,10 +22,12 @@ static t_hitrecord record_sphere_hit(double d, t_ray *ray, t_object *object)
 	rec.point = point_at_collision(ray, d);
 	rec.normal = vec_sub(&rec.point, &object->position);
 	rec.normal = vec_div_num(&rec.normal, object->radius);
+	rec.albedo = object->albedo;
 	return (rec);
 }
 
-int	hit_sphere(t_ray *ray, double dist, t_hitrecord *rec, t_object *object)
+int					hit_sphere(t_ray *ray, double dist,
+					t_hitrecord *rec, t_object *object)
 {
 	t_vec3	pos;
 	double	a;

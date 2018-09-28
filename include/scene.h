@@ -1,26 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   color.h                                            :+:      :+:    :+:   */
+/*   scene.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pthorell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/28 03:59:07 by pthorell          #+#    #+#             */
-/*   Updated: 2018/09/28 03:59:16 by pthorell         ###   ########.fr       */
+/*   Created: 2018/09/28 04:12:05 by pthorell          #+#    #+#             */
+/*   Updated: 2018/09/28 04:12:07 by pthorell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COLOR_H
-# define COLOR_H
+#ifndef SCENE_H
+# define SCENE_H
 
-typedef struct		s_rgb
+# include "object_list.h"
+# include "light_list.h"
+# include "camera.h"
+
+typedef struct	s_scene
 {
-	unsigned char	r;
-	unsigned char	g;
-	unsigned char	b;
-}					t_rgb;
+	t_objlist	*objlist;
+	t_lightlist *lightlist;
+	t_camera	cam;
+}				t_scene;
 
-t_rgb				change_brightness(t_rgb *color, double brightness);
-t_rgb				apply_fog(t_rgb *color, t_rgb *fog_color, double amount);
+enum	e_scene_object
+{
+	SCENE_CAMERA,
+	SCENE_OBJECT,
+	SCENE_LIGHT
+};
+
+int				file_to_scene(char *filename, t_scene *scene);
 
 #endif

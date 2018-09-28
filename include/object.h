@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   object.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pthorell <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/09/28 04:06:14 by pthorell          #+#    #+#             */
+/*   Updated: 2018/09/28 04:06:16 by pthorell         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef OBJECT_H
 # define OBJECT_H
 
 # include "vector.h"
 
-enum object_type
+enum	e_object_type
 {
 	SPHERE,
 	CYLINDER,
@@ -13,7 +25,7 @@ enum object_type
 
 typedef struct			s_object
 {
-	enum object_type	type;
+	enum e_object_type	type;
 	t_vec3				position;
 	t_vec3				albedo;
 	t_vec3				rotation;

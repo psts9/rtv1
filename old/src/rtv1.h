@@ -26,6 +26,7 @@ typedef struct		s_prog
 	char			*name;
 	int				running;
 	int				expose;
+	int				init;
 	t_screen		screen;
 	SDL_Event		event;
 }					t_prog;

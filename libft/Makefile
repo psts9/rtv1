@@ -37,7 +37,7 @@ SRCS = free_strjoin.c ft_memalloc.c ft_strcat.c ft_strncmp.c \
 	   ft_lstdelone.c ft_putnbr.c ft_strlen.c ft_toupper.c \
 	   ft_lstiter.c ft_putnbr_fd.c ft_strmap.c ft_lstmap.c \
 	   ft_putstr.c ft_strmapi.c ft_lstnew.c ft_putstr_fd.c \
-	   ft_strncat.c get_next_line.c file_to_str.c
+	   ft_strncat.c get_next_line.c file_to_str.c ft_atod.c
 
 .PHONY: all clean fclean re
 

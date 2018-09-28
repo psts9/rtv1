@@ -86,5 +86,6 @@ void				free_strnjoin(char **str, const char *src, size_t n);
 char				*ft_strnjoin(char const *s1, char const *s2, size_t n);
 int					get_next_line(const int fd, char **line);
 char				*file_to_str(char *filename);
+double				ft_atod(const char *str);
 
 #endif

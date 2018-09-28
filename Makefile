@@ -21,7 +21,16 @@ SRC = src/rtv1.c \
 	  src/cylinder.c \
 	  src/cone.c \
 	  src/plane.c \
-	  src/matrix_math.c
+	  src/light_list.c \
+	  src/file_to_scene.c \
+	  src/file_reading_utilities.c \
+	  src/get_fileargs.c \
+	  src/get_parameters.c \
+	  src/shading.c \
+	  src/vector_rotate.c \
+	  src/vector_math_simple.c \
+	  src/vector_math_simple_num.c \
+	  src/vector_math_num.c
 
 HDR = $(wildcard include/*.h)
 

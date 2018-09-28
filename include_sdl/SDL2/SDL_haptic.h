@@ -319,11 +319,11 @@ typedef struct _SDL_Haptic SDL_Haptic;
 #define SDL_HAPTIC_CARTESIAN  1
 
 /**
- *  \brief Uses spherical coordinates for the direction.
+ *  \brief Uses POINT coordinates for the direction.
  *
  *  \sa SDL_HapticDirection
  */
-#define SDL_HAPTIC_SPHERICAL  2
+#define SDL_HAPTIC_POINT  2
 
 /* @} *//* Direction encodings */
 
@@ -350,7 +350,7 @@ typedef struct _SDL_Haptic SDL_Haptic;
  *  Directions can be specified by:
  *   - ::SDL_HAPTIC_POLAR : Specified by polar coordinates.
  *   - ::SDL_HAPTIC_CARTESIAN : Specified by cartesian coordinates.
- *   - ::SDL_HAPTIC_SPHERICAL : Specified by spherical coordinates.
+ *   - ::SDL_HAPTIC_POINT : Specified by POINT coordinates.
  *
  *  Cardinal directions of the haptic device are relative to the positioning
  *  of the device.  North is considered to be away from the user.
@@ -403,7 +403,7 @@ typedef struct _SDL_Haptic SDL_Haptic;
  *  it's unused.  In cartesian encoding (1, 2) would be the same as (2, 4), you
  *  can use any multiple you want, only the direction matters.
  *
- *  If type is ::SDL_HAPTIC_SPHERICAL, direction is encoded by two rotations.
+ *  If type is ::SDL_HAPTIC_POINT, direction is encoded by two rotations.
  *  The first two \c dir parameters are used.  The \c dir parameters are as
  *  follows (all values are in hundredths of degrees):
  *   - Degrees from (1, 0) rotated towards (0, 1).
@@ -425,14 +425,14 @@ typedef struct _SDL_Haptic SDL_Haptic;
  *  direction.type = SDL_HAPTIC_POLAR; // We'll be using polar direction encoding.
  *  direction.dir[0] = 18000; // Polar only uses first parameter
  *
- *  // Spherical coordinates
- *  direction.type = SDL_HAPTIC_SPHERICAL; // Spherical encoding
+ *  // POINT coordinates
+ *  direction.type = SDL_HAPTIC_POINT; // POINT encoding
  *  direction.dir[0] = 9000; // Since we only have two axes we don't need more parameters.
  *  \endcode
  *
  *  \sa SDL_HAPTIC_POLAR
  *  \sa SDL_HAPTIC_CARTESIAN
- *  \sa SDL_HAPTIC_SPHERICAL
+ *  \sa SDL_HAPTIC_POINT
  *  \sa SDL_HapticEffect
  *  \sa SDL_HapticNumAxes
  */
