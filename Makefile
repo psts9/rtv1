@@ -1,4 +1,4 @@
-NAME = rtv1
+NAME = RTv1
 
 LIBFTDIR = libft/
 LIBFT = $(LIBFTDIR)libft.a
