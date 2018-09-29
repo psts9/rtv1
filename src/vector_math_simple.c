@@ -41,13 +41,3 @@ t_vec3	vec_mul(t_vec3 *v1, t_vec3 *v2)
 		v1->z * v2->z
 	});
 }
-
-t_vec3	vec_div(t_vec3 *v1, t_vec3 *v2)
-{
-	return ((t_vec3)
-	{
-		v1->x / v2->x,
-		v1->y / v2->y,
-		v1->z / v2->z
-	});
-}

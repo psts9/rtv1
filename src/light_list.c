@@ -48,16 +48,3 @@ void	lightlist_free(t_lightlist **list)
 	}
 	*list = NULL;
 }
-
-int		lightlist_len(t_lightlist *list)
-{
-	int	result;
-
-	result = 0;
-	while (list)
-	{
-		list = list->next;
-		++result;
-	}
-	return (result);
-}

@@ -23,6 +23,5 @@ typedef struct			s_lightlist
 
 void					lightlist_push_back(t_lightlist **list, t_light light);
 void					lightlist_free(t_lightlist **list);
-int						lightlist_len(t_lightlist *list);
 
 #endif

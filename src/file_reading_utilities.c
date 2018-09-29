@@ -33,9 +33,9 @@ char	*skip_to_next_num(char *line)
 		++i;
 	if (!line[i])
 		return (NULL);
-	while (line[i] == ' ' && line[i] == '\t')
+	while (line[i] == ' ' || line[i] == '\t')
 		++i;
-	return (line + i + 1);
+	return (line + i);
 }
 
 int		get_nums(char *line, t_vec3 *dst)

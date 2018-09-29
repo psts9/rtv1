@@ -12,26 +12,6 @@
 
 #include "vector.h"
 
-t_vec3	vec_add_num(t_vec3 *v, double n)
-{
-	return ((t_vec3)
-	{
-		v->x + n,
-		v->y + n,
-		v->z + n
-	});
-}
-
-t_vec3	vec_sub_num(t_vec3 *v, double n)
-{
-	return ((t_vec3)
-	{
-		v->x - n,
-		v->y - n,
-		v->z - n
-	});
-}
-
 t_vec3	vec_mul_num(t_vec3 *v, double n)
 {
 	return ((t_vec3)

@@ -17,7 +17,6 @@ SRC = src/rtv1.c \
 	  src/raytrace.c \
 	  src/event_handler.c \
 	  src/vector_math.c \
-	  src/color.c \
 	  src/sphere.c \
 	  src/raytrace_utility_math.c \
 	  src/cylinder.c \

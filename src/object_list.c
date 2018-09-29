@@ -48,16 +48,3 @@ void	objlist_free(t_objlist **list)
 	}
 	*list = NULL;
 }
-
-int		objlist_len(t_objlist *list)
-{
-	int result;
-
-	result = 0;
-	while (list)
-	{
-		list = list->next;
-		++result;
-	}
-	return (result);
-}
