@@ -2,7 +2,7 @@ NAME = RTv1
 
 LIBFTDIR = libft/
 LIBFT = $(LIBFTDIR)libft.a
-SDL = $(SDLDIR)/build/lib/libsdl2.a
+SDL = $(SDLDIR)/build/lib/libSDL2.a
 SDLDIR = SDL2-2.0.8
 FLAGS = -Wall -Werror -Wextra -Ilibft -I$(SDLDIR)/build/include -L$(SDLDIR)/build/lib -lSDL2 -Iinclude
 
@@ -41,6 +41,7 @@ all: $(NAME)
 $(NAME): $(SRC) $(HDR) $(SDL)
 	make -C $(LIBFTDIR)
 	gcc $(FLAGS) $(SRC) -o $(NAME) $(LIBFT)
+
 
 $(SDL):
 	(cd $(SDLDIR) && \
