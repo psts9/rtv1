@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "file_parsing.h"
+#include "object_list.h"
 
 static t_light	get_default_light(enum e_light_type	type)
 {
@@ -71,7 +72,7 @@ int				get_parameters(int fd, t_scene *scene, int type,
 			ret = get_light_args(line, &light);
 		free(line);
 		if (!ret)
-			return (ret);
+			return (free_scene_lists(&scene));
 		if ((ret = get_next_line(fd, &line)) == 0)
 			break ;
 	}

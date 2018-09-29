@@ -32,5 +32,6 @@ int		skip_whitespace(char *str);
 char	*skip_to_next_num(char *line);
 int		get_nums(char *line, t_vec3 *dst);
 int		is_empty(char *str);
+int		free_scene_lists(t_scene **scene);
 
 #endif

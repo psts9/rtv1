@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "file_parsing.h"
+#include "object_list.h"
+#include "light_list.h"
 
 int		skip_whitespace(char *str)
 {
@@ -63,4 +65,11 @@ int		is_empty(char *str)
 		++i;
 	}
 	return (1);
+}
+
+int		free_scene_lists(t_scene **scene)
+{
+	objlist_free(&(*scene)->objlist);
+	lightlist_free(&(*scene)->lightlist);
+	return (0);
 }
