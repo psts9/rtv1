@@ -36,15 +36,9 @@ void	do_events_running(t_prog *prog)
 		if (prog->event.type == SDL_KEYDOWN)
 		{
 			if (prog->event.key.keysym.sym == SDLK_ESCAPE)
-			{
-				ft_putendl("Exited successfully! ESC_KEY");
 				exit(EXIT_SUCCESS);
-			}
 		}
 		if (prog->event.type == SDL_QUIT)
-		{
-			ft_putendl("Exited successfully! SDL_QUIT");
 			exit(EXIT_SUCCESS);
-		}
 	}
 }
