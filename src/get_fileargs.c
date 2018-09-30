@@ -6,7 +6,7 @@
 /*   By: pthorell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/28 01:55:28 by pthorell          #+#    #+#             */
-/*   Updated: 2018/09/29 00:45:15 by pthorell         ###   ########.fr       */
+/*   Updated: 2018/09/29 17:57:45 by pthorell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	get_object_args(char *line, t_object *obj)
 		ret = get_nums(line + i + 10, &obj->rotation);
 	else if (ft_strncmp(line + i, "radius:", 7) == 0)
 	{
-		obj->radius = abs(ft_atod(line + i + 8));
+		obj->radius = fabs(ft_atod(line + i + 8));
 		ret = 1;
 	}
 	else
@@ -50,7 +50,7 @@ int	get_light_args(char *line, t_light *light)
 		ret = get_nums(line + i + 10, &light->rotation);
 	else if (ft_strncmp(line + i, "intensity:", 10) == 0)
 	{
-		light->intensity = abs(ft_atod(line + i + 11));
+		light->intensity = fabs(ft_atod(line + i + 11));
 		ret = 1;
 	}
 	else
