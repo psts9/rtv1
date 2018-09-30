@@ -6,7 +6,7 @@
 /*   By: pthorell <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 23:53:28 by pthorell          #+#    #+#             */
-/*   Updated: 2018/09/27 23:54:57 by pthorell         ###   ########.fr       */
+/*   Updated: 2018/09/29 20:28:45 by pthorell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int			file_to_scene(char *filename, t_scene *scene)
 	char	*line;
 	int		ret;
 
-	fd = open(filename, O_RDONLY);
+	fd = open(filename, O_RDWR);
 	if (fd < 0)
 		perror_exit(filename);
 	init_scene(scene);
